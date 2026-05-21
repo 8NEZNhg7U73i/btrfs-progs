@@ -252,7 +252,7 @@ objects = \
 	libbtrfsutil/stubs.o	\
 	libbtrfsutil/subvolume.o
 
-cmds_objects = cmds/subvolume.o cmds/subvolume-list.o \
+cmds_objects = cmds/subvolume.o cmds/subvolume-list.o cmds/inspect-dump-csum.o \
 	       cmds/filesystem.o cmds/device.o cmds/scrub.o \
 	       cmds/inspect.o cmds/balance.o cmds/send.o cmds/receive.o \
 	       cmds/quota.o cmds/qgroup.o cmds/replace.o check/main.o \

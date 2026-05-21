@@ -1623,6 +1623,7 @@ static const struct cmd_group inspect_cmd_group = {
 		&cmd_struct_inspect_dump_tree,
 		&cmd_struct_inspect_dump_super,
 		&cmd_struct_inspect_tree_stats,
+		&cmd_struct_inspect_dump_csum,
 		&cmd_struct_inspect_list_chunks,
 		NULL
 	}

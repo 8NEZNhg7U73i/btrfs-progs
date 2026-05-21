@@ -140,6 +140,7 @@ DECLARE_COMMAND(device);
 DECLARE_COMMAND(scrub);
 DECLARE_COMMAND(check);
 DECLARE_COMMAND(inspect);
+DECLARE_COMMAND(inspect_dump_csum);
 DECLARE_COMMAND(inspect_dump_super);
 DECLARE_COMMAND(inspect_dump_tree);
 DECLARE_COMMAND(inspect_tree_stats);
