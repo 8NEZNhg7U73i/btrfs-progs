@@ -147,7 +147,7 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 		}
 	}
 fail:
-	error("btrfs_lookup_csums search failed.");
+	error("btrfs_lookup_csums search failed.\n");
 	if (ret > 0)
 	{
 		ret = -ENOENT;
