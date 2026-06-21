@@ -40,6 +40,15 @@
 
 static const char *const cmd_inspect_dump_csum_usage[] = {"btrfs inspect-internal dump-csum <path/to/file> <device>", "Get csums for the given file.", NULL};
 
+void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length)
+{
+	for (uint8_t i = 0; i < length; i++)
+	{
+		pr_default("%x", bytes[i]);
+	}
+	pr_default(" ");
+}
+
 static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_root *root, struct btrfs_path *path, u64 bytenr, int cow, int total_csums)
 {
 	int ret;
