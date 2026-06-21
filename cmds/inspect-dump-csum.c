@@ -270,6 +270,7 @@ static int cmd_inspect_dump_csum(const struct cmd_struct *cmd, int argc, char **
 	ret = btrfs_lookup_extent(info, &path, st.st_ino, 0);
 	ret = close_ctree(info->fs_root);
 	btrfs_close_all_devices();
+	pr_default("\n");
 
 	return ret;
 }
