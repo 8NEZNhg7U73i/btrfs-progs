@@ -250,7 +250,7 @@ static int cmd_inspect_dump_csum(const struct cmd_struct *cmd, int argc, char **
 	info = open_ctree_fs_info(&oca);
 	if (!info)
 	{
-		error("unable to open %s\n", argv[2]);
+		error("btrfs_open_path failed returned error %d", fd);
 		exit(1);
 	}
 
