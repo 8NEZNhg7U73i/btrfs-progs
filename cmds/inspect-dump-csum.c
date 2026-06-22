@@ -38,6 +38,7 @@
 
 #include "common/messages.h"
 #include "common/open-utils.h"
+#include <sys/ioctl.h>
 
 static const char *const cmd_inspect_dump_csum_usage[] = {"btrfs inspect-internal dump-csum <path/to/file> <device>", "Get csums for the given file.", NULL};
 
