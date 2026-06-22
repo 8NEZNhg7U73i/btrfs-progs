@@ -63,7 +63,7 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 	u64 csum_offset = 0;
 	u16 csum_size = btrfs_super_csum_size(root->fs_info->super_copy);
 	int csums_in_item = 0;
-	unsigned int tree_csum = 0;
+	uint8_t *tree_csum = calloc(csum_size, sizeof(uint8_t));
 	int pending_csums = total_csums;
 	static int cnt = 1;
 
