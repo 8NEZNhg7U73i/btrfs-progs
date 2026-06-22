@@ -315,6 +315,7 @@ static int cmd_inspect_dump_csum(const struct cmd_struct *cmd, int argc, char **
 		uuid_unparse(di_args->uuid, uuid_str);
 		pr_default("UUID: %s\n", uuid_str);
 		pr_default("PATH: %s\n", di_args->path);
+		memset(di_args, 0, sizeof(*di_args));
 	}
 
 	if (strlen(oca.filename) == 0)
