@@ -242,37 +242,95 @@ error:
 static int cmd_inspect_dump_csum(const struct cmd_struct *cmd, int argc, char **argv)
 {
 	struct btrfs_fs_info *info;
+	int fd;
 	int ret;
 	struct btrfs_path path = {0};
 	struct stat st;
-	char *filename;
 	struct open_ctree_args oca = {0};
 	oca.flags = OPEN_CTREE_PARTIAL;
-	oca.filename = argv[2];
+	char fsid_str[BTRFS_UUID_UNPARSED_SIZE];
 
-	if (check_argc_exact(argc, 3))
+	if (check_argc_exact(argc, 2))
 	{
 		usage_unknown_option(cmd, argv);
 	}
 
-	filename = argv[1];
-	info = open_ctree_fs_info(&oca);
-	if (!info)
+	pr_default("path: %s\n", argv[1]);
+
+	ret = stat(argv[1], &st);
+	if (ret < 0)
+	{
+		error("unable to open file stat %s\n", argv[1]);
+		exit(1);
+	}
+
+	if (!S_ISREG(st.st_mode))
+	{
+		error("%s is not a regular file.\n", argv[1]);
+		exit(1);
+	}
+
+	fd = btrfs_open_path(argv[1], false, false);
+	if (fd < 0)
 	{
 		error("btrfs_open_path failed returned error %d", fd);
 		exit(1);
 	}
 
-	ret = stat(filename, &st);
-	if (ret < 0)
+	struct btrfs_ioctl_fs_info_args *fi_args = calloc(1, sizeof(*fi_args));
+	struct btrfs_ioctl_dev_info_args *di_args = calloc(1, sizeof(*di_args));
+
+	if (!fi_args || !di_args)
 	{
-		error("unable to open %s\n", filename);
+		error("mem allocate failed\n");
 		exit(1);
 	}
 
-	if (st.st_size < 1024)
+	ret = ioctl(fd, BTRFS_IOC_FS_INFO, fi_args);
+	if (ret < 0)
 	{
-		error("file less than 1KB.abort%lu", (st.st_size));
+		error("searching target filesystems returned error %d", ret);
+		exit(1);
+	}
+	uuid_unparse(fi_args->fsid, fsid_str);
+	pr_default("FSID: %s\n", fsid_str);
+
+	for (u64 devid = 1; devid <= fi_args->max_id; devid++)
+	{
+		di_args->devid = devid;
+
+		ret = ioctl(fd, BTRFS_IOC_DEV_INFO, di_args);
+		if (ret < 0)
+		{
+			error("searching target device returned error %d", ret);
+			exit(1);
+		}
+		else
+		{
+			oca.filename = di_args->path;
+		}
+		char uuid_str[BTRFS_UUID_UNPARSED_SIZE];
+		uuid_unparse(di_args->uuid, uuid_str);
+		pr_default("UUID: %s\n", uuid_str);
+		pr_default("PATH: %s\n", di_args->path);
+	}
+
+	if (strlen(oca.filename) == 0)
+	{
+		error("Open all btrfs device failed\n");
+		exit(0);
+	}
+
+	info = open_ctree_fs_info(&oca);
+	if (!info)
+	{
+		error("unable to open %s\n", argv[1]);
+		exit(1);
+	}
+
+	if (st.st_size == 0)
+	{
+		error("file size is 0B, about.\n");
 		exit(1);
 	}
 
