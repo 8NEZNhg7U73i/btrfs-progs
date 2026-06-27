@@ -249,7 +249,10 @@ static int cmd_inspect_dump_csum(const struct cmd_struct *cmd, int argc, char **
 	struct btrfs_path path = {0};
 	struct stat st;
 	struct open_ctree_args oca = {0};
+	struct btrfs_ioctl_fs_info_args *fi_args = calloc(1, sizeof(*fi_args));
+	struct btrfs_ioctl_dev_info_args *di_args = calloc(1, sizeof(*di_args));
 	oca.flags = OPEN_CTREE_PARTIAL;
+	oca.filename = calloc(1, sizeof(di_args->path));
 	char fsid_str[BTRFS_UUID_UNPARSED_SIZE];
 
 	if (check_argc_exact(argc, 2))
@@ -278,9 +281,6 @@ static int cmd_inspect_dump_csum(const struct cmd_struct *cmd, int argc, char **
 		error("btrfs_open_path failed returned error %d", fd);
 		exit(1);
 	}
-
-	struct btrfs_ioctl_fs_info_args *fi_args = calloc(1, sizeof(*fi_args));
-	struct btrfs_ioctl_dev_info_args *di_args = calloc(1, sizeof(*di_args));
 
 	if (!fi_args || !di_args)
 	{
