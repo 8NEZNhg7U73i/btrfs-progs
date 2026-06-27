@@ -139,11 +139,11 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 			for (i = 0; i < csums_in_item; i++, cnt++)
 			{
 				read_extent_buffer(leaf, &tree_csum, (unsigned long)item + ((i * csum_size) + start_pos), csum_size);
-				pr_default("%x ", tree_csum);
 				if (cnt % 8 == 0)
 				{
 					pr_default("\n");
 				}
+				print_32_bytes_hex(tree_csum, csum_size);
 			}
 		}
 		pending_csums -= csums_in_item;
