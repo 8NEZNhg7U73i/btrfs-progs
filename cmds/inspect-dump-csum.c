@@ -124,7 +124,7 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 			// possibly,some other csums on this item.
 			for (i = 0; i < pending_csums; i++, cnt++)
 			{
-				if (cnt % 8 == 0)
+				if (cnt % 1 == 0)
 				{
 					pr_default("\n");
 				}
@@ -138,7 +138,7 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 		{
 			for (i = 0; i < csums_in_item; i++, cnt++)
 			{
-				if (cnt % 8 == 0)
+				if (cnt % 1 == 0)
 				{
 					pr_default("\n");
 				}
