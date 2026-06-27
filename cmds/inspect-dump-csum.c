@@ -46,7 +46,7 @@ void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length)
 {
 	for (uint8_t i = 0; i < length; i++)
 	{
-		pr_default("%08x", bytes[i]);
+		pr_default("%x", bytes[i]);
 	}
 	pr_default(" ");
 }
