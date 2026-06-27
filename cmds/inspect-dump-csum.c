@@ -214,7 +214,7 @@ static int btrfs_lookup_extent(struct btrfs_fs_info *info, struct btrfs_path *pa
 			}
 		}
 		btrfs_item_key_to_cpu(leaf, &found_key, slot);
-		if (found_key.type != BTRFS_EXTENT_DATA_KEY)
+		if (found_key.objectid != ino || found_key.type != BTRFS_EXTENT_DATA_KEY)
 		{
 			btrfs_release_path(path);
 			return -EINVAL;
