@@ -309,7 +309,7 @@ static int cmd_inspect_dump_csum(const struct cmd_struct *cmd, int argc, char **
 		}
 		else
 		{
-			memcpy(oca.filename, di_args->path, sizeof(di_args->path));
+			memcpy((void *)oca.filename, di_args->path, sizeof(di_args->path));
 		}
 		char uuid_str[BTRFS_UUID_UNPARSED_SIZE];
 		uuid_unparse(di_args->uuid, uuid_str);
