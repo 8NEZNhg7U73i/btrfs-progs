@@ -51,6 +51,7 @@ void print_32_bytes_hex_le(const uint8_t *bytes, const uint8_t length)
 	pr_default(" ");
 }
 
+void print_32_bytes_hex_be(const uint8_t *bytes, const uint8_t length)
 {
 	for (uint8_t i = 0; i < length; i++)
 	{
