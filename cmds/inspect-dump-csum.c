@@ -51,6 +51,18 @@ void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length)
 	pr_default(" ");
 }
 
+void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length, bool is_be)
+{
+	if (is_be)
+	{
+		print_32_bytes_hex_be(bytes, length);
+	}
+	else
+	{
+		print_32_bytes_hex_le(bytes, length);
+	}
+}
+
 static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_root *root, struct btrfs_path *path, u64 bytenr, int cow, int total_csums)
 {
 	int ret;
