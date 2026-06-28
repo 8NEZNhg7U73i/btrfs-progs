@@ -42,7 +42,6 @@
 
 static const char *const cmd_inspect_dump_csum_usage[] = {"btrfs inspect-internal dump-csum <path/to/file> <device>", "Get csums for the given file.", NULL};
 
-void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length)
 {
 	for (uint8_t i = 0; i < length; i++)
 	{
