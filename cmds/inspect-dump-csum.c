@@ -70,6 +70,11 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 	int pending_csums = total_csums;
 	static int cnt = 1;
 
+	if (csum_type == 2)
+	{
+		is_be = true;
+	}
+
 	file_key.objectid = BTRFS_EXTENT_CSUM_OBJECTID;
 	file_key.offset = bytenr;
 	file_key.type = BTRFS_EXTENT_CSUM_KEY;
