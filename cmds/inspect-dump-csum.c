@@ -257,6 +257,7 @@ static int btrfs_lookup_extent(struct btrfs_fs_info *info, struct btrfs_path *pa
 
 		fi = btrfs_item_ptr(leaf, slot, struct btrfs_file_extent_item);
 		bytenr = btrfs_file_extent_disk_bytenr(leaf, fi);
+		pr_default("btrfs_file_extent_num_bytes(leaf, fi): %d\n", btrfs_file_extent_num_bytes(leaf, fi));
 		total_csums = btrfs_file_extent_num_bytes(leaf, fi) / 4096;
 		path->slots[0]++;
 		itemnum++;
