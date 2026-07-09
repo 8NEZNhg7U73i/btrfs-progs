@@ -40,6 +40,12 @@
 #include "common/open-utils.h"
 #include <sys/ioctl.h>
 
+#if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define IS_LITTLE_ENDIAN 1
+#else
+#defind IS_LITTLE_ENDIAN 0
+#endif
+
 static const char *const cmd_inspect_dump_csum_usage[] = {"btrfs inspect-internal dump-csum <path/to/file> <device>", "Get csums for the given file.", NULL};
 
 void print_32_bytes_hex_le(const uint8_t *bytes, const uint8_t length)
