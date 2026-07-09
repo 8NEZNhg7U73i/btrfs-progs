@@ -68,7 +68,7 @@ void print_32_bytes_hex_forward(const uint8_t *bytes, const uint8_t length)
 
 void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length, bool hash_is_be)
 {
-	if (is_be)
+	if ((hash_is_be & IS_LITTLE_ENDIAN))
 	{
 		print_32_bytes_hex_forward(bytes, length);
 	}
