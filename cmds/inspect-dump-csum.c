@@ -66,7 +66,7 @@ void print_32_bytes_hex_forward(const uint8_t *bytes, const uint8_t length)
 	pr_default(" ");
 }
 
-void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length, bool is_be)
+void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length, bool hash_is_be)
 {
 	if (is_be)
 	{
