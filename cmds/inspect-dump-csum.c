@@ -158,7 +158,7 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 					pr_default("\n");
 				}
 				read_extent_buffer(leaf, tree_csum, (unsigned long)item + ((i * csum_size) + start_pos), csum_size);
-				print_32_bytes_hex(tree_csum, csum_size, is_be);
+				print_32_bytes_hex(tree_csum, csum_size, hash_is_be);
 			}
 			pending_csums = 0;
 			return 0;
