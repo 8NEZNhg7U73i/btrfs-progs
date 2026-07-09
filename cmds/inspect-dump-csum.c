@@ -50,9 +50,9 @@ static const char *const cmd_inspect_dump_csum_usage[] = {"btrfs inspect-interna
 
 void print_32_bytes_hex_backward(const uint8_t *bytes, const uint8_t length)
 {
-	for (uint8_t i = length - 1; i > 0; i--)
+	for (uint8_t i = length; i > 0; i--)
 	{
-		pr_default("%02x", bytes[i]);
+		pr_default("%02x", bytes[i - 1]);
 	}
 	pr_default(" ");
 }
