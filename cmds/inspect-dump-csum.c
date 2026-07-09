@@ -70,11 +70,11 @@ void print_32_bytes_hex(const uint8_t *bytes, const uint8_t length, bool hash_is
 {
 	if (is_be)
 	{
-		print_32_bytes_hex_be(bytes, length);
+		print_32_bytes_hex_forward(bytes, length);
 	}
 	else
 	{
-		print_32_bytes_hex_le(bytes, length);
+		print_32_bytes_hex_backward(bytes, length);
 	}
 }
 
