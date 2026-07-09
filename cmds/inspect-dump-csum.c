@@ -93,7 +93,7 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 
 	if (csum_type == 2 || csum_type == 3)
 	{
-		is_be = true;
+		hash_is_be = true;
 	}
 
 	file_key.objectid = BTRFS_EXTENT_CSUM_OBJECTID;
