@@ -131,9 +131,13 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 			csum_offset = ((bytenr - found_key.offset) / root->fs_info->sectorsize) * csum_size;
 			csums_in_item = btrfs_item_size(leaf, path->slots[0]);
 			csums_in_item /= csum_size;
+			pr_default("csums_in_item: %d\n", csums_in_item);
 			csums_in_item -= (bytenr - found_key.offset) / root->fs_info->sectorsize;
 			start_pos = csum_offset;
+			pr_default("found_key.objectid: %lld, found_key.type: %lld, found_key.offset: %lld,  csum_offset: %lld, csums_in_item: %d\n", found_key.objectid, found_key.type, found_key.offset, csum_offset, csums_in_item);
+			fflush(stdout);
 		}
+		pr_default("btrfs_header_nritems(leaf): %lld\n", btrfs_header_nritems(leaf));
 		if (path->slots[0] >= btrfs_header_nritems(leaf))
 		{
 			if (pending_csums > 0)
@@ -145,14 +149,17 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 				}
 			}
 		}
-		item = btrfs_item_ptr(leaf, path->slots[0], struct btrfs_csum_item);
+		item = ((struct btrfs_csum_item *)(btrfs_item_nr_offset(leaf, 0) + btrfs_item_offset(leaf, path->slots[0])));
 		btrfs_item_key_to_cpu(leaf, &found_key, path->slots[0]);
 		if (!ret)
 		{
 			start_pos = 0;
 			csum_offset = (bytenr - found_key.offset) / root->fs_info->sectorsize;
 			csums_in_item = btrfs_item_size(leaf, path->slots[0]);
+			pr_default("csums_in_item: %d\n", csums_in_item);
 			csums_in_item /= csum_size;
+			pr_default("found_key.objectid: %lld, found_key.type: %lld, found_key.offset: %lld,  csum_offset: %lld, csums_in_item: %d\n", found_key.objectid, found_key.type, found_key.offset, csum_offset, csums_in_item);
+			fflush(stdout);
 		}
 		if (csums_in_item > pending_csums)
 		{
@@ -165,8 +172,11 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 				}
 				read_extent_buffer(leaf, tree_csum, (unsigned long)item + ((i * csum_size) + start_pos), csum_size);
 				print_32_bytes_hex(tree_csum, csum_size, hash_is_be);
+				pr_default("\n");
 			}
 			pending_csums = 0;
+			fflush(stdout);
+			pr_default("\n");
 			return 0;
 		}
 		else
@@ -179,6 +189,8 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 				}
 				read_extent_buffer(leaf, tree_csum, (unsigned long)item + ((i * csum_size) + start_pos), csum_size);
 				print_32_bytes_hex(tree_csum, csum_size, hash_is_be);
+				pr_default("\n");
+				fflush(stdout);
 			}
 		}
 		pending_csums -= csums_in_item;
@@ -190,7 +202,10 @@ static int btrfs_lookup_csums(struct btrfs_trans_handle *trans, struct btrfs_roo
 		else
 		{
 			return 0;
+			pr_default("\n");
+			fflush(stdout);
 		}
+		return 0;
 	}
 fail:
 	error("btrfs_lookup_csums search failed.\n");
@@ -210,7 +225,7 @@ static int btrfs_lookup_extent(struct btrfs_fs_info *info, struct btrfs_path *pa
 	struct btrfs_root *fs_root;
 	int ret = -1;
 	int slot;
-	int total_csums = 0;
+	uint64_t total_csums = 0;
 	u64 bytenr;
 	u64 itemnum = 0;
 	struct btrfs_path *path1 = NULL;
@@ -225,13 +240,14 @@ static int btrfs_lookup_extent(struct btrfs_fs_info *info, struct btrfs_path *pa
 	{
 		goto error;
 	}
+
 	if (ret > 1)
 	{
 		error("Unable to find the entry");
 		return ret;
 	}
 	struct btrfs_root *csum_root = btrfs_csum_root(info, 0);
-	u16 csum_size = btrfs_super_csum_size(csum_root->fs_info->super_copy);
+	uint64_t csum_size = btrfs_super_csum_size(csum_root->fs_info->super_copy);
 	while (1)
 	{
 		leaf = path->nodes[0];
@@ -259,11 +275,13 @@ static int btrfs_lookup_extent(struct btrfs_fs_info *info, struct btrfs_path *pa
 		bytenr = btrfs_file_extent_disk_bytenr(leaf, fi);
 		pr_default("btrfs_file_extent_num_bytes(leaf, fi): %d\n", btrfs_file_extent_num_bytes(leaf, fi));
 		total_csums = btrfs_file_extent_num_bytes(leaf, fi) / 4096;
+		pr_default("btrfs_file_extent_num_bytes(leaf, fi): %llu\n", btrfs_file_extent_num_bytes(leaf, fi));
 		path->slots[0]++;
 		itemnum++;
 		path1 = btrfs_alloc_path();
 		csum_root = btrfs_csum_root(info, 0);
 		ret = btrfs_lookup_csums(NULL, csum_root, path1, bytenr, 0, total_csums);
+		pr_default("file offset: %llu, file logical: %llu, csum_size: %llu, total_csums: %llu\n", found_key.offset, bytenr, csum_size, total_csums);
 		btrfs_release_path(path1);
 		if (ret)
 		{
